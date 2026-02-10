@@ -104,12 +104,6 @@
       border: 1px solid rgba(0,0,0,0.08);
     }
 
-    .tiny {
-      margin-top: 14px;
-      font-size: 13px;
-      opacity: 0.7;
-    }
-
     /* petits coeurs animés */
     .heart {
       position: fixed;
@@ -131,14 +125,11 @@
   <div class="card" id="card">
     <div class="badge">💌 Question très importante</div>
     <h1>Soufia, veux-tu être ma Valentine <span class="date">ce samedi 14</span> ? 💖</h1>
-    <p>Promis, c’est un “oui” très facile 😌</p>
 
     <div class="buttons">
       <button id="yes">Oui 💘</button>
       <button id="no">Non 😢</button>
     </div>
-
-    <div class="tiny">PS : Le bouton “Non” est potentiellement bugué.</div>
   </div>
 
   <script>
@@ -165,10 +156,10 @@
       const card = document.getElementById("card");
       card.innerHTML = `
         <div class="badge">✅ Validé</div>
-        <h1>OUIIIII 💞</h1>
-        <p>J’ai trop hâte de te voir le 14 💕</p>
+        <h1>Trop hâte de te voir 💕</h1>
+        <p>Le 14 arrive vite 😌</p>
         <p style="margin-top:10px; font-size:14px; opacity:0.75;">
-          (Tu viens de faire mon weekend.)
+          (T’avais pas trop le choix de toute façon.)
         </p>
       `;
     });
