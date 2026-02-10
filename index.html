@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soufia 💖</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      color: #2b2b2b;
+      background: radial-gradient(circle at top, #ffd1e1 0%, #ffe6ef 40%, #fff7fb 100%);
+      overflow: hidden;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.55;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255, 105, 180, 0.22) 0 2px, transparent 3px),
+        radial-gradient(circle at 70% 15%, rgba(255, 105, 180, 0.18) 0 2px, transparent 3px),
+        radial-gradient(circle at 30% 80%, rgba(255, 105, 180, 0.16) 0 2px, transparent 3px),
+        radial-gradient(circle at 85% 75%, rgba(255, 105, 180, 0.16) 0 2px, transparent 3px);
+      filter: blur(0.2px);
+    }
+
+    .card {
+      position: relative;
+      width: min(560px, 92vw);
+      padding: 32px 26px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+      border: 1px solid rgba(255, 59, 122, 0.12);
+      text-align: center;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 59, 122, 0.12);
+      color: #c2185b;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.2px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    p {
+      margin: 0 0 18px;
+      opacity: 0.85;
+      font-size: 16px;
+    }
+
+    .date {
+      font-weight: 700;
+      color: #c2185b;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.08s ease;
+      font-weight: 700;
+    }
+    button:active { transform: scale(0.98); }
+
+    #yes {
+      background: linear-gradient(135deg, #ff3b7a, #ff6aa2);
+      color: white;
+      box-shadow: 0 10px 25px rgba(255, 59, 122, 0.28);
+    }
+
+    #no {
+      background: rgba(0,0,0,0.06);
+      color: #2b2b2b;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .tiny {
+      margin-top: 14px;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    /* petits coeurs animés */
+    .heart {
+      position: fixed;
+      font-size: 18px;
+      animation: floatUp 5.5s linear infinite;
+      opacity: 0.75;
+      pointer-events: none;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.10));
+    }
+    @keyframes floatUp {
+      from { transform: translateY(30px); }
+      to { transform: translateY(-110vh); }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts"></div>
+
+  <div class="card" id="card">
+    <div class="badge">💌 Question très importante</div>
+    <h1>Soufia, veux-tu être ma Valentine <span class="date">ce samedi 14</span> ? 💖</h1>
+    <p>Promis, c’est un “oui” très facile 😌</p>
+
+    <div class="buttons">
+      <button id="yes">Oui 💘</button>
+      <button id="no">Non 😢</button>
+    </div>
+
+    <div class="tiny">PS : Le bouton “Non” est potentiellement bugué.</div>
+  </div>
+
+  <script>
+    // Coeurs qui flottent
+    const hearts = ["💗","💖","💘","💕","💞"];
+    function spawnHeart() {
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      h.style.left = Math.floor(Math.random() * 100) + "vw";
+      h.style.animationDuration = (4.5 + Math.random() * 3) + "s";
+      h.style.fontSize = (14 + Math.random() * 18) + "px";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 8000);
+    }
+    setInterval(spawnHeart, 700);
+
+    // Actions boutons
+    document.getElementById("no").addEventListener("click", () => {
+      window.location.href = "no.html";
+    });
+
+    document.getElementById("yes").addEventListener("click", () => {
+      const card = document.getElementById("card");
+      card.innerHTML = `
+        <div class="badge">✅ Validé</div>
+        <h1>OUIIIII 💞</h1>
+        <p>J’ai trop hâte de te voir le 14 💕</p>
+        <p style="margin-top:10px; font-size:14px; opacity:0.75;">
+          (Tu viens de faire mon weekend.)
+        </p>
+      `;
+    });
+  </script>
+</body>
+</html>
