@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Erreur</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top, #ffd1e1 0%, #ffe6ef 45%, #fff7fb 100%);
+      color: #2b2b2b;
+      padding: 18px;
+    }
+    .card {
+      width: min(560px, 92vw);
+      padding: 28px 22px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+      border: 1px solid rgba(255, 59, 122, 0.12);
+      text-align: center;
+    }
+    .icon { font-size: 44px; margin-bottom: 8px; }
+    h1 { margin: 0 0 10px; font-size: 24px; }
+    p { margin: 0 0 18px; opacity: 0.85; }
+    .actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+    a {
+      border: 0;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .retry {
+      background: linear-gradient(135deg, #ff3b7a, #ff6aa2);
+      color: white;
+      box-shadow: 0 10px 25px rgba(255, 59, 122, 0.28);
+    }
+    .back {
+      background: rgba(0,0,0,0.06);
+      color: #2b2b2b;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">⚠️</div>
+    <h1>Une erreur est apparue</h1>
+    <p>Veuillez essayer un autre bouton 😌</p>
+
+    <div class="actions">
+      <a class="retry" href="index.html">Réessayer</a>
+      <a class="back" href="index.html">Retour</a>
+    </div>
+  </div>
+</body>
+</html>
