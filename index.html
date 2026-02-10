@@ -41,7 +41,7 @@
       box-shadow: 0 18px 45px rgba(0,0,0,0.12);
       border: 1px solid rgba(255, 59, 122, 0.12);
       text-align: center;
-      z-index: 1;
+      z-index: 2;
     }
 
     .badge {
@@ -64,8 +64,9 @@
 
     p {
       margin: 0 0 18px;
-      opacity: 0.85;
+      opacity: 0.88;
       font-size: 16px;
+      line-height: 1.5;
     }
 
     .date {
@@ -92,13 +93,12 @@
     }
     button:active { transform: scale(0.98); }
 
-    #yes {
+    .primary {
       background: linear-gradient(135deg, #ff3b7a, #ff6aa2);
       color: white;
       box-shadow: 0 10px 25px rgba(255, 59, 122, 0.28);
     }
-
-    #no {
+    .secondary {
       background: rgba(0,0,0,0.06);
       color: #2b2b2b;
       border: 1px solid rgba(0,0,0,0.08);
@@ -112,10 +112,77 @@
       opacity: 0.75;
       pointer-events: none;
       filter: drop-shadow(0 6px 10px rgba(0,0,0,0.10));
+      z-index: 1;
     }
     @keyframes floatUp {
       from { transform: translateY(30px); }
       to { transform: translateY(-110vh); }
+    }
+
+    /* Lettre/enveloppe */
+    .envelope {
+      width: min(420px, 86vw);
+      margin: 0 auto 18px;
+      position: relative;
+      height: 220px;
+    }
+    .env-back {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 59, 122, 0.14);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.10);
+    }
+    .env-flap {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 120px;
+      background: linear-gradient(135deg, rgba(255,59,122,0.20), rgba(255,106,162,0.20));
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      transform-origin: top;
+      transition: transform 0.7s ease;
+      border-bottom: 1px solid rgba(255, 59, 122, 0.10);
+    }
+    .letter {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      height: 155px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      transform: translateY(55px);
+      transition: transform 0.8s ease;
+      text-align: center;
+      font-weight: 700;
+      color: #c2185b;
+    }
+
+    .open .env-flap { transform: rotateX(160deg); }
+    .open .letter { transform: translateY(-10px); }
+
+    /* Feux d'artifice (confetti particles) */
+    .particle {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 3;
+      animation: pop 900ms ease-out forwards;
+    }
+    @keyframes pop {
+      0% { transform: translate(0,0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) rotate(220deg) scale(0.9); opacity: 0; }
     }
   </style>
 </head>
@@ -123,12 +190,34 @@
   <div class="hearts"></div>
 
   <div class="card" id="card">
-    <div class="badge">💌 Question très importante</div>
-    <h1>Soufia, veux-tu être ma Valentine <span class="date">ce samedi 14</span> ? 💖</h1>
+    <!-- ÉCRAN 1 : lettre -->
+    <div id="screenLetter">
+      <div class="badge">💌 Pour toi</div>
 
-    <div class="buttons">
-      <button id="yes">Oui 💘</button>
-      <button id="no">Non 😢</button>
+      <div class="envelope" id="envelope">
+        <div class="env-back"></div>
+        <div class="env-flap"></div>
+        <div class="letter">Clique pour ouvrir ✨</div>
+      </div>
+
+      <p style="margin-top: 8px;">
+        J’ai un truc à te demander, et je voulais le faire à ma façon.
+      </p>
+
+      <div class="buttons">
+        <button class="primary" id="openBtn">Ouvrir la lettre</button>
+      </div>
+    </div>
+
+    <!-- ÉCRAN 2 : question -->
+    <div id="screenQuestion" style="display:none;">
+      <div class="badge">💌 Question très importante</div>
+      <h1>Soufia, veux-tu être ma Valentine <span class="date">ce samedi 14</span> ? 💖</h1>
+
+      <div class="buttons">
+        <button class="primary" id="yes">Oui 💘</button>
+        <button class="secondary" id="no">Non 😢</button>
+      </div>
     </div>
   </div>
 
@@ -147,21 +236,76 @@
     }
     setInterval(spawnHeart, 700);
 
-    // Actions boutons
-    document.getElementById("no").addEventListener("click", () => {
-      window.location.href = "no.html";
+    // Animation lettre
+    const envelope = document.getElementById("envelope");
+    const openBtn = document.getElementById("openBtn");
+    const screenLetter = document.getElementById("screenLetter");
+    const screenQuestion = document.getElementById("screenQuestion");
+
+    function goToQuestion() {
+      envelope.classList.add("open");
+      setTimeout(() => {
+        screenLetter.style.display = "none";
+        screenQuestion.style.display = "block";
+      }, 650);
+    }
+
+    envelope.addEventListener("click", goToQuestion);
+    openBtn.addEventListener("click", goToQuestion);
+
+    // Page Non
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "no") {
+        window.location.href = "no.html";
+      }
     });
 
-    document.getElementById("yes").addEventListener("click", () => {
-      const card = document.getElementById("card");
-      card.innerHTML = `
-        <div class="badge">✅ Validé</div>
-        <h1>Trop hâte de te voir 💕</h1>
-        <p>Le 14 arrive vite 😌</p>
-        <p style="margin-top:10px; font-size:14px; opacity:0.75;">
-          (T’avais pas trop le choix de toute façon.)
-        </p>
-      `;
+    // Confettis / feu d'artifice
+    function fireworksBurst() {
+      const bursts = 3;
+      for (let b = 0; b < bursts; b++) {
+        const originX = (20 + Math.random() * 60) * window.innerWidth / 100;
+        const originY = (25 + Math.random() * 35) * window.innerHeight / 100;
+
+        const count = 26;
+        for (let i = 0; i < count; i++) {
+          const p = document.createElement("div");
+          p.className = "particle";
+
+          const dx = (Math.random() - 0.5) * 380 + "px";
+          const dy = (Math.random() - 0.9) * 420 + "px";
+          p.style.setProperty("--dx", dx);
+          p.style.setProperty("--dy", dy);
+
+          // couleurs roses/rouges/blanc
+          const palette = ["#ff3b7a", "#ff6aa2", "#ffc1d6", "#ffffff", "#c2185b"];
+          p.style.background = palette[Math.floor(Math.random() * palette.length)];
+
+          p.style.left = originX + "px";
+          p.style.top = originY + "px";
+
+          document.body.appendChild(p);
+          setTimeout(() => p.remove(), 950);
+        }
+      }
+    }
+
+    // Oui
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "yes") {
+        fireworksBurst();
+        const card = document.getElementById("card");
+        setTimeout(() => {
+          card.innerHTML = `
+            <div class="badge">✅ Validé</div>
+            <h1>Trop hâte de te voir 💕</h1>
+            <p>Le 14 arrive vite 😌</p>
+            <p style="margin-top:10px; font-size:14px; opacity:0.75;">
+              (T’avais pas trop le choix de toute façon.)
+            </p>
+          `;
+        }, 200);
+      }
     });
   </script>
 </body>
